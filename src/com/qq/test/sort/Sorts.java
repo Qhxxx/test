@@ -2,6 +2,9 @@ package com.qq.test.sort;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 /**
  * @author qq
@@ -49,8 +52,7 @@ public class Sorts {
 
     public static void adjustHeap(int index, int[] arr, int length) {
         int temp = arr[index];
-
-        for (int i = index * 2 + 1; i < length; i = i * 2 + 1) {
+        for (int i = index * 2 + 1; i < length; i = i * 2 + 1) {//向下调整
             if(i + 1 < length && arr[i+1]>arr[i]){//index*2+1左节点  比较左节点大还是右节点大
                 i++;
             }
@@ -97,18 +99,21 @@ public class Sorts {
      */
     public static void mergeSort(int left, int right, int[] arr, int[] temp) {
         if (left >= right) return;
+
         int mid = left + ((right - left) >> 1);
 
         mergeSort(left, mid, arr, temp);
         mergeSort(mid + 1, right, arr, temp);
+
         if (arr[mid + 1] > arr[mid]) return;
+
         int l = left;
         int index = left;
         int r = mid + 1;
         while (index <= right ) {
-            if (l == (mid + 1)) temp[index++] = arr[r++];
-            else if (r == (right + 1)) temp[index++] = arr[l++];
-            else if (arr[l] < arr[r]) temp[index++] = arr[l++];
+            if (l == (mid + 1)) temp[index++] = arr[r++];//左边数组已经用完了
+            else if (r == (right + 1)) temp[index++] = arr[l++];//右边数组已经用完了
+            else if (arr[l] < arr[r]) temp[index++] = arr[l++];//谁小谁在前
             else temp[index++] = arr[r++];
 
         }
